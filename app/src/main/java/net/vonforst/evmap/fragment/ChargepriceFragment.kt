@@ -24,11 +24,13 @@ import net.vonforst.evmap.R
 import net.vonforst.evmap.adapter.ChargepriceAdapter
 import net.vonforst.evmap.adapter.CheckableChargepriceCarAdapter
 import net.vonforst.evmap.adapter.CheckableConnectorAdapter
+import net.vonforst.evmap.api.chargeprice.ChargepriceApi
 import net.vonforst.evmap.api.chargeprice.ChargepriceCar
 import net.vonforst.evmap.api.equivalentPlugTypes
 import net.vonforst.evmap.databinding.FragmentChargepriceBinding
 import net.vonforst.evmap.model.Chargepoint
 import net.vonforst.evmap.storage.PreferenceDataSource
+import net.vonforst.evmap.viewmodel.ChargepriceFeedbackType
 import net.vonforst.evmap.viewmodel.ChargepriceViewModel
 import net.vonforst.evmap.viewmodel.Status
 import net.vonforst.evmap.viewmodel.viewModelFactory
@@ -42,7 +44,8 @@ class ChargepriceFragment : Fragment() {
         viewModelFactory {
             ChargepriceViewModel(
                 requireActivity().application,
-                getString(R.string.chargeprice_key)
+                getString(R.string.chargeprice_key),
+                getString(R.string.chargeprice_api_url)
             )
         }
     })
@@ -103,9 +106,7 @@ class ChargepriceFragment : Fragment() {
 
         val fragmentArgs: ChargepriceFragmentArgs by navArgs()
         val charger = fragmentArgs.charger
-        val dataSource = fragmentArgs.dataSource
         vm.charger.value = charger
-        vm.dataSource.value = dataSource
         if (vm.chargepoint.value == null) {
             vm.chargepoint.value = charger.chargepointsMerged.get(0)
         }
@@ -170,11 +171,14 @@ class ChargepriceFragment : Fragment() {
         }
 
         binding.imgChargepriceLogo.setOnClickListener {
-            (requireActivity() as MapsActivity).openUrl("https://www.chargeprice.app/?poi_id=${charger.id}&poi_source=${dataSource}")
+            (requireActivity() as MapsActivity).openUrl(ChargepriceApi.getPoiUrl(charger))
         }
 
         binding.btnSettings.setOnClickListener {
             findNavController().navigate(R.id.action_chargeprice_to_chargepriceSettingsFragment)
+        }
+        binding.btnFeedbackMissingPrice.setOnClickListener {
+            feedbackMissingPrice()
         }
 
         binding.batteryRange.setLabelFormatter { value: Float ->
@@ -194,6 +198,14 @@ class ChargepriceFragment : Fragment() {
             when (it.itemId) {
                 R.id.menu_help -> {
                     (activity as? MapsActivity)?.openUrl(getString(R.string.chargeprice_faq_link))
+                    true
+                }
+                R.id.menu_feedback_missing_price -> {
+                    feedbackMissingPrice()
+                    true
+                }
+                R.id.menu_feedback_wrong_price -> {
+                    feedbackWrongPrice()
                     true
                 }
                 else -> false
@@ -227,6 +239,32 @@ class ChargepriceFragment : Fragment() {
 
         // Workaround for AndroidX bug: https://github.com/material-components/material-components-android/issues/1984
         view.setBackgroundColor(MaterialColors.getColor(view, android.R.attr.windowBackground))
+    }
+
+    private fun feedbackMissingPrice() {
+        findNavController().navigate(
+            R.id.action_chargeprice_to_chargepriceFeedbackFragment,
+            ChargepriceFeedbackFragmentArgs(
+                ChargepriceFeedbackType.MISSING_PRICE,
+                vm.charger.value,
+                vm.vehicle.value,
+                vm.chargePricesForChargepoint.value?.data?.toTypedArray(),
+                vm.batteryRange.value?.toFloatArray()
+            ).toBundle()
+        )
+    }
+
+    private fun feedbackWrongPrice() {
+        findNavController().navigate(
+            R.id.action_chargeprice_to_chargepriceFeedbackFragment,
+            ChargepriceFeedbackFragmentArgs(
+                ChargepriceFeedbackType.WRONG_PRICE,
+                vm.charger.value,
+                vm.vehicle.value,
+                vm.chargePricesForChargepoint.value?.data?.toTypedArray(),
+                vm.batteryRange.value?.toFloatArray()
+            ).toBundle()
+        )
     }
 
 }

@@ -246,4 +246,13 @@
     <string name="pref_map_rotate_gestures_on">Map can be rotated with two-finger gesture</string>
     <string name="pref_map_rotate_gestures_off">Map will be fixed to north-up</string>
     <string name="refresh_live_data">refresh real-time status</string>
+    <string name="chargeprice_feedback">Feedback</string>
+    <string name="chargeprice_feedback_missing_price">Report missing price</string>
+    <string name="chargeprice_feedback_wrong_price">Report incorrect price</string>
+    <string name="chargeprice_feedback_email">Email address for further questions</string>
+    <string name="chargeprice_feedback_comment">Other details</string>
+    <string name="chargeprice_feedback_price">Price (per kWh, minute, etc.)</string>
+    <string name="chargeprice_feedback_cpo">Station operator (CPO): %s</string>
+    <string name="chargeprice_feedback_tariff">Provider / plan</string>
+    <string name="chargeprice_feedback_send">Submit</string>
 </resources>

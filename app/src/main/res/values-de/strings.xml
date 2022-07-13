@@ -261,4 +261,13 @@
     <string name="pref_map_rotate_gestures_on">Karte kann mit Zweifingergeste rotiert werden</string>
     <string name="pref_map_rotate_gestures_off">Karte bleibt fest nach Norden ausgerichtet</string>
     <string name="refresh_live_data">Echtzeitstatus aktualisieren</string>
+    <string name="chargeprice_feedback">Feedback</string>
+    <string name="chargeprice_feedback_missing_price">Fehlenden Preis melden</string>
+    <string name="chargeprice_feedback_wrong_price">Falschen Preis melden</string>
+    <string name="chargeprice_feedback_email">E-Mail-Adresse für Rückfragen</string>
+    <string name="chargeprice_feedback_comment">Weitere Infos</string>
+    <string name="chargeprice_feedback_price">Preis (pro kWh, Minute, etc.)</string>
+    <string name="chargeprice_feedback_cpo">Betreiber der Station (CPO): %s</string>
+    <string name="chargeprice_feedback_tariff">Anbieter bzw. Tarif</string>
+    <string name="chargeprice_feedback_send">Absenden</string>
 </resources>
